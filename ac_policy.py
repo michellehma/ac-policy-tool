@@ -61,7 +61,7 @@ def added(tableNum, numInTable, list):
         return True
     return False
 
-if model == 1: 
+if model == '1': 
     #randomize number of attributes to combine
     #randomize which attributes to choose
     numSubject = random.randint(1, 4)
@@ -181,21 +181,114 @@ if model == 1:
                   "environment attributes": envir}
     policy = json.dumps(policyDict)
 
-elif model == 2:
-    policyDict = {"model":"RBAC",
-                  "subject attributes": subjects,
-                  "object attributes": objects,
-                  "environment attributes": envir}
-    policy = json.dumps(policyDict)
+elif model == '2':
 
-elif model == 3:
-    policyDict = {"model":"CT-RBAC",
-                  "subject attributes": subjects,
-                  "object attributes": objects,
-                  "environment attributes": envir}
-    policy = json.dumps(policyDict)
 
-elif model == 4:
+    # RBAC policy logic
+    subject_attributes = {
+        "name": ["Alice", "Bob", "Carol"],
+        "organization": ["Org1", "Org2"],
+        "job title": ["CEO", "Engineer", "Marketing Specialist"],
+        "account ID": ["001", "002", "003"]
+    }
+
+    object_attributes = {
+        "files": ["financial_report", "engineering_docs", "marketing_plan"]
+    }
+
+    envir_attributes = {
+        "time": ["morning", "afternoon", "evening", "night"],
+        "date": str(date.today()),  # Convert date object to string
+        "networkSec": [1, 2, 3],
+        "services": []
+    }
+
+    # Additional RBAC details as provided, such as roles, resources, tags, purposes, role_permissions, user_roles
+    role_permissions = {
+        "ceo": ["read", "write", "update", "delete"],
+        "engineer": ["read", "write", "update"],
+        "marketing specialist": ["read", "update"]
+    }
+
+    user_roles = {
+        "alice": ["ceo"],
+        "bob": ["engineer"],
+        "carol": ["marketing specialist"]
+    }
+
+    rbac_policy = {
+        "model": "RBAC",
+        "subject attributes": subject_attributes,
+        "object attributes": object_attributes,
+        "environment attributes": envir_attributes,
+        "roles": roles,
+        "resources": resources,
+        "tags": tags,
+        "purposes": purposes,
+        "role permissions": role_permissions,  # Added role-permissions
+        "user roles": user_roles  # Added user-role assignments
+    }
+
+    
+    policy = json.dumps(rbac_policy, indent=4)
+    
+elif model == '3':
+    
+    subject_attributes = {"name": [], "organization": [], "job title": [], "account ID": []}
+
+    object_attributes = {
+    "part": ["partkey", "name", "mfgr", "brand", "type" , "size", "container", "retailprice", "comment"],
+    "supplier": ["suppkey", "name", "address", "nationkey", "phone", "acctbal", "comment"],
+    "partsupp": ["partkey", "suppkey", "availqty", "supplycost", "comment"],
+    "customer": ["custkey", "name", "address", "nationkey", "phone", "acctbal", "mktsegment", "comment"],
+    "nation": ["nationkey", "name", "regionkey", "comment"],
+    "lineitem": ["orderkey", "partkey", "suppkey", "linenumber", "quantity", "extendedprice",
+                 "discount", "tax", "returnflag", "linestatus", "shipdate", "commitdate", "receiptdate",
+                 "shipinstruct", "shipmode", "comment"],
+    "region": ["regionkey", "name", "comment"],
+    "orders": ["orderkey", "custkey", "orderstatus", "totalprice", "orderdate", "order-priority", "clerk", 
+               "ship-priority", "comment"]
+     }
+
+    envir_attributes = {
+        "time": ["morning", "afternoon", "evening", "night"],
+        "date": str(date.today()),  # Convert date object to string
+        "networkSec": [1, 2, 3],
+        "services": []
+    }
+
+    roles = ["ceo", "supervisor", "engineer", "investor", "labor", "customer", "supplier", "financial advisor", "marketing specialist"]
+
+
+    contextual_conditions = {
+        "time_restrictions": {
+            "ceo": ["morning", "afternoon"],
+            "engineer": ["morning", "afternoon", "evening"],
+            "marketing specialist": ["afternoon", "evening"]
+        },
+        "network_security_level_required": {
+            "ceo": 3,
+            "engineer": 2,
+            "financial advisor": 3,
+            "customer": 1
+        }
+    }
+
+    ct_rbac_policy = {
+        "model": "CT-RBAC",
+        "subject attributes": subject_attributes,
+        "object attributes": object_attributes,
+        "environment attributes": envir_attributes,
+        "roles": roles,
+        "resources": resources,
+        "tags": tags,
+        "purposes": purposes,
+        "contextual conditions": contextual_conditions  # Added contextual conditions
+    }
+
+    policy = json.dumps(ct_rbac_policy, indent=4)
+
+elif model == '4':
     policyDict = {"model":"OT-ABAC",
                   "subject attributes": subjects,
                   "object attributes": objects,
@@ -211,5 +304,5 @@ elif model == 5:
 
 else:
     print("Invalid input, try again")
-
+print(" ")
 print(policy)
